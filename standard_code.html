@@ -48,10 +48,12 @@
 		  //change the file name to yours
 		  $.getJSON("https://clhyman.github.io/finalLab4.geojson")
 		    .done(function(data) {
+		        //console.log(data);
 		        var info = processData(data);
+		        console.log(info);
 		        createPropSymbols(info.timestamps, data);
 		        createSliderUI(info.timestamps);
-		   });
+		  });
 		
 		
 		  function processData(data) {
@@ -67,6 +69,14 @@
 		          var properties = data.features[feature].properties;
 		
 		          // At each row, go through the columns/attributes to get the values
+		          
+		          // PMJ: instead of the NOTs, it might be more clear to more directly grab
+		          // the properties you care about, without this nested loop
+		          // so, look at `properties` and specifically select the attribute, and
+		          // do whatever with it?
+		          // Basically, removing this inner loop seems like it'll help to see what's 
+		          // really happening
+		          
 		          for (var attribute in properties) {
 		              if ( attribute != 'id' &&
 		                   attribute != 'name' &&
@@ -96,9 +106,9 @@
 		          min : min,
 		          max : max
 		      }
-		    }
+		  }
 		
-		    // The function to draw the proportional symbols
+		  // The function to draw the proportional symbols
 		  function createPropSymbols(timestamps, data) {
 		
 		    cities = L.geoJson(data, {
@@ -130,7 +140,7 @@
 		
 			function createSliderUI(timestamps) {
 			  var sliderControl = L.control({ position: 'bottomleft'} ); // position of the slider
-			                    // Another use of L.control :)
+        // Another use of L.control :)
 			  sliderControl.onAdd = function(map) {
 			    //initialize a range slider with mousedown control
 			      var slider = L.DomUtil.create("input", "range-slider");
@@ -158,6 +168,10 @@
 			    return slider;
 			  }
 			  sliderControl.addTo(map);
+			  
+			  //PMJ: this hardcoded time label raises an eyebrow
+			  // I'd expect something that loops through the labels array in 
+			  // some way
 			  createTimeLabel("1950"); //The starting timestamp label
 			}
 		
@@ -199,10 +213,7 @@
 		
 		    return Math.sqrt(area/Math.PI);  // the function return the radius of the circle to be used in the updatePropSymbols()
 		  }
-
-
    </script>
-
   </body>
 </html>
  
